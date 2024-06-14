@@ -1,93 +1,71 @@
+// script.js
 document.addEventListener("DOMContentLoaded", function () {
   const display = document.getElementById("display");
+  const buttons = Array.from(document.getElementsByClassName("btn"));
   let currentInput = "0";
-  let firstOperand = null;
-  let operator = null;
-  let waitingForSecondOperand = false;
+  let previousInput = "";
+  let operator = "";
 
-  const updateDisplay = () => {
-    display.textContent = currentInput;
-  };
+  buttons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const value = this.getAttribute("data-value");
 
-  const inputDigit = (digit) => {
-    if (currentInput === "0" || waitingForSecondOperand) {
-      currentInput = digit;
-      waitingForSecondOperand = false;
-    } else {
-      currentInput += digit;
-    }
-    updateDisplay();
-  };
+      if (value === "C") {
+        currentInput = "0";
+        previousInput = "";
+        operator = "";
+        updateDisplay(currentInput);
+        return;
+      }
 
-  const inputDecimal = () => {
-    if (!currentInput.includes(".")) {
-      currentInput += ".";
-      updateDisplay();
-    }
-  };
+      if (value === "=") {
+        if (previousInput && operator) {
+          currentInput = calculate(previousInput, currentInput, operator);
+          operator = "";
+          previousInput = "";
+          updateDisplay(currentInput);
+        }
+        return;
+      }
 
-  const handleOperator = (nextOperator) => {
-    const inputValue = parseFloat(currentInput);
+      if (["+", "-", "*", "/"].includes(value)) {
+        if (operator) {
+          currentInput = calculate(previousInput, currentInput, operator);
+          updateDisplay(currentInput);
+        }
+        operator = value;
+        previousInput = currentInput;
+        currentInput = "0";
+        return;
+      }
 
-    if (firstOperand === null) {
-      firstOperand = inputValue;
-    } else if (operator) {
-      const result = calculate(firstOperand, inputValue, operator);
-      currentInput = String(result);
-      firstOperand = result;
-    }
-
-    waitingForSecondOperand = true;
-    operator = nextOperator;
-    updateDisplay();
-  };
-
-  const calculate = (firstOperand, secondOperand, operator) => {
-    switch (operator) {
-      case "+":
-        return firstOperand + secondOperand;
-      case "-":
-        return firstOperand - secondOperand;
-      case "*":
-        return firstOperand * secondOperand;
-      case "/":
-        return firstOperand / secondOperand;
-      default:
-        return secondOperand;
-    }
-  };
-
-  const resetCalculator = () => {
-    currentInput = "0";
-    firstOperand = null;
-    operator = null;
-    waitingForSecondOperand = false;
-    updateDisplay();
-  };
-
-  // Event listeners for buttons
-  document.getElementById("clear").addEventListener("click", resetCalculator);
-  document.getElementById("decimal").addEventListener("click", inputDecimal);
-  document
-    .getElementById("equals")
-    .addEventListener("click", () => handleOperator());
-  document
-    .getElementById("add")
-    .addEventListener("click", () => handleOperator("+"));
-  document
-    .getElementById("subtract")
-    .addEventListener("click", () => handleOperator("-"));
-  document
-    .getElementById("multiply")
-    .addEventListener("click", () => handleOperator("*"));
-  document
-    .getElementById("divide")
-    .addEventListener("click", () => handleOperator("/"));
-
-  const numberButtons = document.querySelectorAll(".number");
-  numberButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      inputDigit(button.textContent);
+      if (currentInput === "0") {
+        currentInput = value;
+      } else {
+        currentInput += value;
+      }
+      updateDisplay(currentInput);
     });
   });
+
+  function updateDisplay(value) {
+    display.textContent = value;
+  }
+
+  function calculate(a, b, operator) {
+    a = parseFloat(a);
+    b = parseFloat(b);
+    switch (operator) {
+      case "+":
+        return (a + b).toString();
+      case "-":
+        return (a - b).toString();
+      case "*":
+        return (a * b).toString();
+      case "/":
+        return (a / b).toString();
+      default:
+        return b;
+    }
+  }
 });

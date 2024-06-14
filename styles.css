@@ -1,43 +1,117 @@
+/* styles.css */
 body {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  background-color: #f4f4f4;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
 }
 
 .calculator {
-  display: grid;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: repeat(5, 80px);
-  gap: 10px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom right, #ffffff, #e6e6e6);
 }
 
 .display {
-  grid-column: span 4;
+  background-color: #333;
+  color: #fff;
+  font-size: 2.5em;
+  padding: 20px;
   text-align: right;
-  padding: 10px;
-  background-color: #f0f0f0;
-  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  border-radius: 15px 15px 0 0;
+  box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.2);
 }
 
-button {
-  font-size: 24px;
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+}
+
+.btn {
   border: none;
+  font-size: 1.5em;
+  padding: 20px;
   cursor: pointer;
-  background-color: #e0e0e0;
-  border-radius: 4px;
+  text-align: center;
+  transition: background-color 0.2s, transform 0.2s;
+  color: white;
 }
 
-button:active {
-  background-color: #ccc;
+/* Number buttons */
+.btn[data-value="0"],
+.btn[data-value="1"],
+.btn[data-value="2"],
+.btn[data-value="3"],
+.btn[data-value="4"],
+.btn[data-value="5"],
+.btn[data-value="6"],
+.btn[data-value="7"],
+.btn[data-value="8"],
+.btn[data-value="9"] {
+  background-color: #3498db; /* Blue */
 }
 
-.number,
+.btn[data-value="0"]:active,
+.btn[data-value="1"]:active,
+.btn[data-value="2"]:active,
+.btn[data-value="3"]:active,
+.btn[data-value="4"]:active,
+.btn[data-value="5"]:active,
+.btn[data-value="6"]:active,
+.btn[data-value="7"]:active,
+.btn[data-value="8"]:active,
+.btn[data-value="9"]:active {
+  background-color: #2980b9;
+}
+
+/* Operator buttons */
 .operator {
-  grid-column: span 1;
+  background-color: #e74c3c; /* Red */
+}
+
+.operator:active {
+  background-color: #c0392b;
+}
+
+/* Clear button */
+.btn[data-value="C"] {
+  background-color: #f1c40f; /* Yellow */
+}
+
+.btn[data-value="C"]:active {
+  background-color: #d4ac0d;
+}
+
+/* Equals button */
+.btn[data-value="="] {
+  background-color: #2ecc71; /* Green */
+}
+
+.btn[data-value="="]:active {
+  background-color: #27ae60;
+}
+
+/* Decimal button */
+.btn[data-value="."] {
+  background-color: #9b59b6; /* Purple */
+}
+
+.btn[data-value="."]:active {
+  background-color: #8e44ad;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:hover {
+  opacity: 0.9;
 }
